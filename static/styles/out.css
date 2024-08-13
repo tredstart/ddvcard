@@ -841,6 +841,12 @@ input {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.hover\:shadow-around:hover {
+  --tw-shadow: 0 2px 12px 1px rgba(0, 0, 0, 0.50);
+  --tw-shadow-colored: 0 2px 12px 1px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
 .hover\:shadow-around-xl:hover {
   --tw-shadow: 0 5px 12px 1px rgba(0, 0, 0, 0.75);
   --tw-shadow-colored: 0 5px 12px 1px var(--tw-shadow-color);

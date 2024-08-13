@@ -1,11 +1,20 @@
 package views
 
-import "ddcard/internal/models"
+import (
+	"ddcard/internal/models"
+	"fmt"
+)
 
 templ Results(results []models.PatientPartial) {
 	if len(results) != 0 {
 		for _, result := range results {
-			<div class="w-1/2 h-48 p-4 box-border shrink-0 border-black border-2 border-solid">
+			<div
+				class="w-1/2 h-48 p-4 box-border shrink-0 border-black border-2 border-solid hover:cursor-pointer hover:shadow-around"
+				hx-get={ fmt.Sprintf("/patient/%s", result.Id) }
+				hx-trigger="click"
+				hx-target="body"
+				hx-push-url="true"
+			>
 				<p><b>Imię:</b> { result.Name }</p>
 				<p><b>Nazwisko:</b> { result.Surname }</p>
 				<p><b>Pesel:</b> { result.Pesel }</p>

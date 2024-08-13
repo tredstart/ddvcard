@@ -10,7 +10,10 @@ import "context"
 import "io"
 import "bytes"
 
-import "ddcard/internal/models"
+import (
+	"ddcard/internal/models"
+	"fmt"
+)
 
 func Results(results []models.PatientPartial) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
@@ -27,7 +30,15 @@ func Results(results []models.PatientPartial) templ.Component {
 		ctx = templ.ClearChildren(ctx)
 		if len(results) != 0 {
 			for _, result := range results {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"w-1/2 h-48 p-4 box-border shrink-0 border-black border-2 border-solid\"><p><b>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"w-1/2 h-48 p-4 box-border shrink-0 border-black border-2 border-solid hover:cursor-pointer hover:shadow-around\" hx-get=\"")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(fmt.Sprintf("/patient/%s", result.Id)))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-trigger=\"click\" hx-target=\"body\" hx-push-url=\"true\"><p><b>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
