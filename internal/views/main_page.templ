@@ -1,0 +1,72 @@
+package views
+
+import "ddcard/internal/models"
+
+templ Results(results []models.PatientPartial) {
+	if len(results) != 0 {
+		for _, result := range results {
+			<div class="w-[80%] h-40 flex">
+				<p><b>Imię:</b> { result.Name }</p>
+				<p><b>Nazwisko:</b> { result.Surname }</p>
+				<p>Pesel: { result.Pesel }</p>
+			</div>
+		}
+	} else {
+		<div><p>Nie znaleziono żadnych pacjentów</p></div>
+	}
+}
+
+templ RegisterPatientButton() {
+	<button
+		type="button"
+		hx-get="/new-patient"
+		hx-target="body"
+		hx-push-url="true"
+		class="fixed bottom-20 right-32 shadow-around w-12 text-3xl rounded-full py-1 hover:shadow-around-xl hover:bottom-[5.1rem]"
+	>+</button>
+}
+
+templ IndexPage() {
+	<!DOCTYPE HTML>
+	<html>
+		@head("MainPage")
+		<body class="font-mono">
+			@RegisterPatientButton()
+			<div class="flex flex-col items-center p-10 gap-2" hx-boost="true">
+				<div class="pt-40">
+					<h3 class="text-3xl underline">
+						Szukaj pacjentów
+						<span class="htmx-indicator">
+							<img src="/static/img/bars.svg"/> Szukam... 
+						</span>
+					</h3>
+				</div>
+				<div class="flex flex-row gap-4">
+					<input
+						class="border-black border-2 flex-initial w-72 border-solid rounded p-2"
+						type="search"
+						name="search"
+						placeholder="za Imieniem i Nazwiskiem"
+						hx-post="/search"
+						hx-trigger="input changed delay:500ms, search"
+						hx-target="#patients"
+						hx-indicator=".htmx-indicator"
+					/>
+					<input
+						class="border-black border-2 flex-initial w-72 border-solid rounded p-2"
+						type="search"
+						name="search"
+						placeholder="za pomocą PESEL"
+						hx-post="/search"
+						hx-trigger="input changed delay:500ms, search"
+						hx-target="#patients"
+						hx-indicator=".htmx-indicator"
+					/>
+				</div>
+				<div id="patients" class="p-4">
+					@Results([]models.PatientPartial{})
+				</div>
+			</div>
+		</body>
+	</html>
+}
