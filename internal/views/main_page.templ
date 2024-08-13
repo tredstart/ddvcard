@@ -5,10 +5,12 @@ import "ddcard/internal/models"
 templ Results(results []models.PatientPartial) {
 	if len(results) != 0 {
 		for _, result := range results {
-			<div class="w-[80%] h-40 flex">
+			<div class="w-1/2 h-48 p-4 box-border shrink-0 border-black border-2 border-solid">
 				<p><b>Imię:</b> { result.Name }</p>
 				<p><b>Nazwisko:</b> { result.Surname }</p>
-				<p>Pesel: { result.Pesel }</p>
+				<p><b>Pesel:</b> { result.Pesel }</p>
+				<p><b>Data urodzenia: </b> { result.Birthdate }</p>
+				<p><b>Telefon:</b> { result.Phone }</p>
 			</div>
 		}
 	} else {
@@ -63,14 +65,14 @@ templ IndexPage() {
 						hx-indicator=".htmx-indicator"
 					/>
 				</div>
-				<div id="patients" class="p-4">
+				<div id="patients" class="p-7 w-full gap-2 box-border flex flex-col items-center">
 					@Results([]models.PatientPartial{})
 				</div>
 				<script>
-                document.body.addEventListener("htmx:responseError", function(event){
-                    const patients = document.getElementById("patients")
-                    patients.innerHTML = event.detail.xhr.response
-                }) 
+                    document.body.addEventListener("htmx:responseError", function(event){
+                        const patients = document.getElementById("patients")
+                        patients.innerHTML = event.detail.xhr.response
+                    }) 
                 </script>
 			</div>
 		</body>

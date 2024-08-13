@@ -8,6 +8,5 @@ create table if not exists patient (
     medicine text,
     illness integer default 0,
     registered text not null,
-    child integer default 0,
     phone text not null
 )

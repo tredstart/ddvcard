@@ -44,7 +44,6 @@ type Patient struct {
 	Medicines  string
 	Illness    int
 	Registered string
-	Child      int
 	Phone      string
 }
 
@@ -52,7 +51,6 @@ type PatientPartial struct {
 	Id        string
 	Name      string
 	Surname   string
-	Child     int
 	Pesel     string
 	Birthdate string
 	Phone     string
@@ -63,7 +61,7 @@ func FetchPatientsByName(name, surname string) ([]PatientPartial, error) {
 
 	if err := database.DB.Select(
 		&patients,
-		`SELECT id, name, surname, child, pesel, birthdate, phone FROM patient WHERE name LIKE ? OR surname LIKE ?`,
+		`SELECT id, name, surname, pesel, birthdate, phone FROM patient WHERE name LIKE ? OR surname LIKE ?`,
 		fmt.Sprintf("%s%%", name),
 		fmt.Sprintf("%s%%", surname),
 	); err != nil {
@@ -77,7 +75,7 @@ func FetchPatientsByName(name, surname string) ([]PatientPartial, error) {
 func FetchPatientsByPesel(pesel string) ([]PatientPartial, error) {
 	var patients []PatientPartial
 
-	if err := database.DB.Select(&patients, `SELECT id, name, surname, child, pesel, birthdate, phone FROM patient WHERE pesel LIKE ?`, fmt.Sprintf("%s%%", pesel)); err != nil {
+	if err := database.DB.Select(&patients, `SELECT id, name, surname, pesel, birthdate, phone FROM patient WHERE pesel LIKE ?`, fmt.Sprintf("%s%%", pesel)); err != nil {
 		log.Println("couln't read partial by pesel")
 		return []PatientPartial{}, err
 	}
@@ -87,7 +85,7 @@ func FetchPatientsByPesel(pesel string) ([]PatientPartial, error) {
 
 func PatientCreate(p Patient) error {
 	if _, err := database.DB.Exec(
-		`INSERT INTO patient VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+		`INSERT INTO patient VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 		p.Id,
 		p.Name,
 		p.Surname,
@@ -97,7 +95,6 @@ func PatientCreate(p Patient) error {
 		p.Medicines,
 		p.Illness,
 		p.Registered,
-		p.Child,
 		p.Phone,
 	); err != nil {
 		return err

@@ -28,18 +28,19 @@ func NewPatient(c echo.Context) error {
 	c.Request().ParseForm()
 	r := c.Request()
 	pesel := r.FormValue("pesel")
-	if patients, err := models.FetchPatientsByPesel(pesel); err == nil || len(patients) > 0 {
-		c.Response().Header().Add("Hx-Retarget", "#errors")
-		c.Response().Header().Add("Hx-Reswap", "innerHTML")
-		return c.HTML(http.StatusBadRequest, `<div><p>Pacjent z tym numerem pesel już istnieje</p></div>`)
+	if pesel != "" {
+		if patients, err := models.FetchPatientsByPesel(pesel); len(patients) > 0 {
+			c.Response().Header().Add("Hx-Retarget", "#errors")
+			c.Response().Header().Add("Hx-Reswap", "innerHTML")
+			return c.HTML(http.StatusBadRequest, `<div><p>Pacjent z tym numerem pesel już istnieje</p></div>`)
+		} else if err != nil {
+			return c.String(http.StatusBadRequest, err.Error())
+		}
 	}
 	patient := models.Patient{}
 	patient.Name = r.FormValue("name")
 	patient.Surname = r.FormValue("surname")
 	patient.Address = r.FormValue("address")
-	if r.FormValue("child") == "on" {
-		patient.Child = 1
-	}
 	patient.Birthdate = r.FormValue("birthdate")
 	patient.Pesel = pesel
 	patient.Registered = time.Now().Format("02.01.2006")
