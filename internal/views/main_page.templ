@@ -45,7 +45,7 @@ templ IndexPage() {
 					<input
 						class="border-black border-2 flex-initial w-72 border-solid rounded p-2"
 						type="search"
-						name="search"
+						name="name"
 						placeholder="za Imieniem i Nazwiskiem"
 						hx-post="/search"
 						hx-trigger="input changed delay:500ms, search"
@@ -55,7 +55,7 @@ templ IndexPage() {
 					<input
 						class="border-black border-2 flex-initial w-72 border-solid rounded p-2"
 						type="search"
-						name="search"
+						name="pesel"
 						placeholder="za pomocą PESEL"
 						hx-post="/search"
 						hx-trigger="input changed delay:500ms, search"
@@ -66,6 +66,12 @@ templ IndexPage() {
 				<div id="patients" class="p-4">
 					@Results([]models.PatientPartial{})
 				</div>
+				<script>
+                document.body.addEventListener("htmx:responseError", function(event){
+                    const patients = document.getElementById("patients")
+                    patients.innerHTML = event.detail.xhr.response
+                }) 
+                </script>
 			</div>
 		</body>
 	</html>

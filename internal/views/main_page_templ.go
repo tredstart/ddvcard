@@ -184,7 +184,7 @@ func IndexPage() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></h3></div><div class=\"flex flex-row gap-4\"><input class=\"border-black border-2 flex-initial w-72 border-solid rounded p-2\" type=\"search\" name=\"search\" placeholder=\"za Imieniem i Nazwiskiem\" hx-post=\"/search\" hx-trigger=\"input changed delay:500ms, search\" hx-target=\"#patients\" hx-indicator=\".htmx-indicator\"> <input class=\"border-black border-2 flex-initial w-72 border-solid rounded p-2\" type=\"search\" name=\"search\" placeholder=\"za pomocą PESEL\" hx-post=\"/search\" hx-trigger=\"input changed delay:500ms, search\" hx-target=\"#patients\" hx-indicator=\".htmx-indicator\"></div><div id=\"patients\" class=\"p-4\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></h3></div><div class=\"flex flex-row gap-4\"><input class=\"border-black border-2 flex-initial w-72 border-solid rounded p-2\" type=\"search\" name=\"name\" placeholder=\"za Imieniem i Nazwiskiem\" hx-post=\"/search\" hx-trigger=\"input changed delay:500ms, search\" hx-target=\"#patients\" hx-indicator=\".htmx-indicator\"> <input class=\"border-black border-2 flex-initial w-72 border-solid rounded p-2\" type=\"search\" name=\"pesel\" placeholder=\"za pomocą PESEL\" hx-post=\"/search\" hx-trigger=\"input changed delay:500ms, search\" hx-target=\"#patients\" hx-indicator=\".htmx-indicator\"></div><div id=\"patients\" class=\"p-4\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -192,7 +192,21 @@ func IndexPage() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></body></html>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><script>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Var14 := `
+                document.body.addEventListener("htmx:responseError", function(event){
+                    const patients = document.getElementById("patients")
+                    patients.innerHTML = event.detail.xhr.response
+                }) 
+                `
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var14)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script></div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

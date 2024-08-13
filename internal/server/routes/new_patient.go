@@ -3,7 +3,6 @@ package routes
 import (
 	"ddcard/internal/models"
 	"ddcard/internal/views"
-	"log"
 	"net/http"
 	"time"
 
@@ -41,6 +40,9 @@ func NewPatient(c echo.Context) error {
 	patient.Phone = r.FormValue("phone")
 	patient.Id = uuid.NewString()
 	patient.Medicines = r.FormValue("medicines")
-    patient.Illness = GetIllness(r.Form["illness"])
+	patient.Illness = GetIllness(r.Form["illness"])
+	if err := models.PatientCreate(patient); err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
 	return c.String(http.StatusOK, "Pacjent został zapisany poprawnie.")
 }

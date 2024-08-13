@@ -1,5 +1,11 @@
 package models
 
+import (
+	"ddcard/internal/database"
+	"fmt"
+	"log"
+)
+
 var Illness = map[string]int{
 	"Papierosy":          Papierosy,
 	"Alergia":            Alergia,
@@ -50,4 +56,35 @@ type PatientPartial struct {
 	Pesel     string
 	Birthdate string
 	Phone     string
+}
+
+func FetchPatientsByPesel(pesel string) ([]PatientPartial, error) {
+	var patients []PatientPartial
+
+	if err := database.DB.Select(&patients, `SELECT id, name, surname, child, pesel, birthdate, phone FROM patient WHERE pesel LIKE ?`, fmt.Sprintf("%s%%", pesel)); err != nil {
+		log.Println("couln't read partial by pesel")
+		return []PatientPartial{}, err
+	}
+
+	return patients, nil
+}
+
+func PatientCreate(p Patient) error {
+	if _, err := database.DB.Exec(
+		`INSERT INTO patient VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+		p.Id,
+		p.Name,
+		p.Surname,
+		p.Birthdate,
+		p.Pesel,
+		p.Address,
+		p.Medicines,
+		p.Illness,
+		p.Registered,
+		p.Child,
+		p.Phone,
+	); err != nil {
+		return err
+	}
+	return nil
 }
