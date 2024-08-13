@@ -1,5 +1,19 @@
 package models
 
+var Illness = map[string]int{
+	"Papierosy":          Papierosy,
+	"Alergia":            Alergia,
+	"Nadcisnienie":       Nadcisnienie,
+	"Cukrzyca":           Cukrzyca,
+	"ChorobyTarczycy":    ChorobyTarczycy,
+	"Epilepsja":          Epilepsja,
+	"SkazaKrwotoczna":    SkazaKrwotoczna,
+	"Zoltaczka":          Zoltaczka,
+	"Gruzlica":           Gruzlica,
+	"AIDS":               AIDS,
+	"ChorobyOdogniskowe": ChorobyOdogniskowe,
+}
+
 const (
 	Papierosy          = 1 << 0
 	Alergia            = 1 << 1
@@ -7,7 +21,7 @@ const (
 	Cukrzyca           = 1 << 3
 	ChorobyTarczycy    = 1 << 4
 	Epilepsja          = 1 << 5
-	SkazaKrowotoczna   = 1 << 6
+	SkazaKrwotoczna    = 1 << 6
 	Zoltaczka          = 1 << 7
 	Gruzlica           = 1 << 8
 	AIDS               = 1 << 9
@@ -25,6 +39,7 @@ type Patient struct {
 	Illness    int
 	Registered string
 	Child      int
+	Phone      string
 }
 
 type PatientPartial struct {
@@ -34,4 +49,5 @@ type PatientPartial struct {
 	Child     int
 	Pesel     string
 	Birthdate string
+	Phone     string
 }

@@ -14,6 +14,8 @@ func (s *Server) RegisterRoutes() http.Handler {
 	e.Use(middleware.Recover())
 	e.Static("/static", "static")
 	e.GET("/", routes.IndexPage)
+	e.GET("/new-patient", routes.NewPatientForm)
+	e.POST("/new-patient", routes.NewPatient)
 
 	return e
 }
