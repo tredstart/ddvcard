@@ -58,6 +58,22 @@ type PatientPartial struct {
 	Phone     string
 }
 
+func FetchPatientsByName(name, surname string) ([]PatientPartial, error) {
+	var patients []PatientPartial
+
+	if err := database.DB.Select(
+		&patients,
+		`SELECT id, name, surname, child, pesel, birthdate, phone FROM patient WHERE name LIKE ? OR surname LIKE ?`,
+		fmt.Sprintf("%s%%", name),
+		fmt.Sprintf("%s%%", surname),
+	); err != nil {
+		log.Println("couln't read partial by pesel")
+		return []PatientPartial{}, err
+	}
+
+	return patients, nil
+}
+
 func FetchPatientsByPesel(pesel string) ([]PatientPartial, error) {
 	var patients []PatientPartial
 
