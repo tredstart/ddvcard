@@ -2,6 +2,15 @@ package views
 
 import "ddcard/internal/models"
 
+script Errors() {
+    document.body.addEventListener('htmx:beforeOnLoad', function (evt) {
+        if (evt.detail.xhr.status >= 400) {
+            evt.detail.shouldSwap = true;
+            evt.detail.isError = false;
+        }
+    });
+}
+
 templ PatientForm(patient models.Patient) {
 	<!DOCTYPE html>
 	<html>
@@ -98,6 +107,8 @@ templ PatientForm(patient models.Patient) {
 							/>
 						</div>
 					</form>
+					<div id="errors" class="text-red-700" hx-swap-oob="true"></div>
+					@Errors()
 				</div>
 			</div>
 		</body>

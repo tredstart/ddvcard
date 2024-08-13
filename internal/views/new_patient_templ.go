@@ -12,6 +12,20 @@ import "bytes"
 
 import "ddcard/internal/models"
 
+func Errors() templ.ComponentScript {
+	return templ.ComponentScript{
+		Name: `__templ_Errors_9f39`,
+		Function: `function __templ_Errors_9f39(){document.body.addEventListener('htmx:beforeOnLoad', function (evt) {
+        if (evt.detail.xhr.status >= 400) {
+            evt.detail.shouldSwap = true;
+            evt.detail.isError = false;
+        }
+    });}`,
+		Call:       templ.SafeScript(`__templ_Errors_9f39`),
+		CallInline: templ.SafeScriptInline(`__templ_Errors_9f39`),
+	}
+}
+
 func PatientForm(patient models.Patient) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
@@ -168,7 +182,15 @@ func PatientForm(patient models.Patient) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><input type=\"submit\" value=\"Wyślij\" class=\"border-black border-2 border-solid rounded p-2 hover:bg-black hover:text-white\"></div></form></div></div></body></html>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><input type=\"submit\" value=\"Wyślij\" class=\"border-black border-2 border-solid rounded p-2 hover:bg-black hover:text-white\"></div></form><div id=\"errors\" class=\"text-red-700\" hx-swap-oob=\"true\"></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = Errors().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
