@@ -294,6 +294,97 @@ templ BackTooth(num int) {
 	</div>
 }
 
+templ KnownIllness(illness int) {
+	<p>
+		Papierosy :
+		if illness & models.Papierosy != 0 {
+			tak
+		} else {
+			nie
+		}
+	</p>
+	<p>
+		Alergia :
+		if illness & models.Alergia != 0 {
+			tak
+		} else {
+			nie
+		}
+	</p>
+	<p>
+		Nadciśnienie :
+		if illness & models.Nadcisnienie != 0 {
+			tak
+		} else {
+			nie
+		}
+	</p>
+	<p>
+		Cukrzyca :
+		if illness & models.Cukrzyca != 0 {
+			tak
+		} else {
+			nie
+		}
+	</p>
+	<p>
+		Choroby Tarczycy :
+		if illness & models.ChorobyTarczycy != 0 {
+			tak
+		} else {
+			nie
+		}
+	</p>
+	<p>
+		Epilepsja :
+		if illness & models.Epilepsja != 0 {
+			tak
+		} else {
+			nie
+		}
+	</p>
+	<p>
+		Skaza Krwotoczna :
+		if illness & models.SkazaKrwotoczna != 0 {
+			tak
+		} else {
+			nie
+		}
+	</p>
+	<p>
+		Żółtaczka:
+		if illness & models.Zoltaczka != 0 {
+			tak
+		} else {
+			nie
+		}
+	</p>
+	<p>
+		Gruźlica:
+		if illness & models.Gruzlica != 0 {
+			tak
+		} else {
+			nie
+		}
+	</p>
+	<p>
+		AIDS:
+		if illness & models.AIDS != 0 {
+			tak
+		} else {
+			nie
+		}
+	</p>
+	<p>
+		Choroby Odogniskowe:
+		if illness & models.ChorobyOdogniskowe != 0 {
+			tak
+		} else {
+			nie
+		}
+	</p>
+}
+
 templ PatientPage(patient models.Patient) {
 	<!DOCTYPE HTML>
 	<html>
@@ -305,6 +396,19 @@ templ PatientPage(patient models.Patient) {
 					<p>
 						{ patient.Name } { patient.Surname }
 					</p>
+					<p>
+						{ patient.Birthdate }
+					</p>
+					<p>
+						{ patient.Pesel }
+					</p>
+					<p>
+						{ patient.Address }
+					</p>
+					<p>
+						{ patient.Medicine }
+					</p>
+					@KnownIllness(patient.Illness)
 				</div>
 				<div class="flex flex-row gap-2">
 					<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
