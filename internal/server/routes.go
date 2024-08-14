@@ -16,7 +16,8 @@ func (s *Server) RegisterRoutes() http.Handler {
 	e.GET("/", routes.IndexPage)
 	e.GET("/new-patient", routes.NewPatientForm)
 	e.POST("/new-patient", routes.NewPatient)
-    e.POST("/search", routes.Search)
+	e.POST("/search", routes.Search)
+    e.GET("/patient/:id", routes.PatientPage)
 
 	return e
 }

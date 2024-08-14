@@ -41,7 +41,7 @@ type Patient struct {
 	Birthdate  string
 	Pesel      string
 	Address    string
-	Medicines  string
+	Medicine   string
 	Illness    int
 	Registered string
 	Phone      string
@@ -54,6 +54,16 @@ type PatientPartial struct {
 	Pesel     string
 	Birthdate string
 	Phone     string
+}
+
+func FetchPatient(id string) (Patient, error) {
+	var patient Patient
+
+	if err := database.DB.Get(&patient, `SELECT * FROM patient where id = ?`, id); err != nil {
+		return Patient{}, err
+	}
+
+	return patient, nil
 }
 
 func FetchPatientsByName(name, surname string) ([]PatientPartial, error) {
@@ -83,7 +93,7 @@ func FetchPatientsByPesel(pesel string) ([]PatientPartial, error) {
 	return patients, nil
 }
 
-func PatientCreate(p Patient) error {
+func CreatePatient(p Patient) error {
 	if _, err := database.DB.Exec(
 		`INSERT INTO patient VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 		p.Id,
@@ -92,7 +102,7 @@ func PatientCreate(p Patient) error {
 		p.Birthdate,
 		p.Pesel,
 		p.Address,
-		p.Medicines,
+		p.Medicine,
 		p.Illness,
 		p.Registered,
 		p.Phone,

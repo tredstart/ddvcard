@@ -1,0 +1,388 @@
+package views
+
+import (
+	"ddcard/internal/models"
+	"fmt"
+)
+
+templ BackTop() {
+	<svg viewBox="0 0 48 12" width="48" height="12" _="on mouseenter toggle [@stroke-width=3] on me until mouseleave">
+		<path
+			fill="none"
+			stroke="black"
+			d="
+            M 0 0
+            h 48 
+            l -12 12
+            h -24 z
+            "
+		></path>
+	</svg>
+}
+
+templ BackRight() {
+	<svg viewBox="0 0 12 48" width="12" height="48" _="on mouseenter toggle [@stroke-width=3] on me until mouseleave">
+		<path
+			fill="none"
+			stroke="black"
+			d="
+            M 12 0
+            v 48 
+            l -12 -12
+            v -24 z
+            "
+		></path>
+	</svg>
+}
+
+templ BackBottom() {
+	<svg viewBox="0 0 48 12" width="48" height="12" _="on mouseenter toggle [@stroke-width=3] on me until mouseleave">
+		<path
+			fill="none"
+			stroke="black"
+			d="
+            M 0 12
+            h 48
+            l -12 -12
+            h -24 z
+            "
+		></path>
+	</svg>
+}
+
+templ BackLeft() {
+	<svg viewBox="0 0 12 48" width="12" height="48" _="on mouseenter toggle [@stroke-width=3] on me until mouseleave">
+		<path
+			fill="none"
+			stroke="black"
+			d="
+            M 0 0
+            v 48 
+            l 12 -12 
+            v -24 z
+            "
+		></path>
+	</svg>
+}
+
+templ BackCenter() {
+	<svg viewBox="0 0 24 24" width="24" height="24" _="on mouseenter toggle [@stroke-width=3] on me until mouseleave">
+		<path
+			fill="none"
+			stroke="black"
+			d="
+            M 0 0
+            h 24 
+            v 24
+            h -24 z
+            "
+		></path>
+	</svg>
+}
+
+templ FrontTop() {
+	<svg
+		viewBox="0 0 48 24"
+		fill="none"
+		stroke="black"
+		width="48"
+		height="24"
+		_="on mouseenter toggle [@stroke-width=3] on me until mouseleave"
+	>
+		<path
+			d="
+            M 0 0
+            h 48
+            l -12 24
+            h -24 z
+            "
+		></path>
+	</svg>
+}
+
+templ FrontLeft() {
+	<svg
+		viewBox="0 0 12 48"
+		fill="none"
+		stroke="black"
+		width="12"
+		height="48"
+		_="on mouseenter toggle [@stroke-width=3] on me until mouseleave"
+	>
+		<path
+			d="
+            M 0 0
+            v 48
+            l 12 -24 z
+            "
+		></path>
+	</svg>
+}
+
+templ FrontBottom() {
+	<svg
+		viewBox="0 0 48 24"
+		fill="none"
+		stroke="black"
+		width="48"
+		height="24"
+		_="on mouseenter toggle [@stroke-width=3] on me until mouseleave"
+	>
+		<path
+			d="
+            M 0 24
+            h 48
+            l -12 -24
+            h -24 z
+            "
+		></path>
+	</svg>
+}
+
+templ FrontRight() {
+	<svg
+		viewBox="0 0 12 48"
+		fill="none"
+		stroke="black"
+		width="12"
+		height="48"
+		_="on mouseenter toggle [@stroke-width=3] on me until mouseleave"
+	>
+		<path
+			d="
+            M 12 0
+            v 48
+            l -12 -24 z
+            "
+		></path>
+	</svg>
+}
+
+templ RootCanalUp() {
+	<svg
+		viewBox="0 0 16 72"
+		fill="none"
+		stroke="black"
+		width="16"
+		height="72"
+		_="on mouseenter toggle [@stroke-width=3] on me until mouseleave"
+	>
+		<path
+			d="
+            M 0 72
+            l 3 -60
+            a 5 50 0 0 1 8 30
+            l 3 60"
+		></path>
+	</svg>
+}
+
+templ RootCanalDown() {
+	<svg
+		viewBox="0 0 16 72"
+		fill="none"
+		stroke="black"
+		width="16"
+		height="72"
+		_="on mouseenter toggle [@stroke-width=3] on me until mouseleave"
+	>
+		<path
+			d="
+            M 0 0
+            l 3 60
+            a 5 50 0 0 0 8 -30
+            l 3 -60"
+		></path>
+	</svg>
+}
+
+templ FrontTooth(num int) {
+	<div class="flex flex-col items-center text-center">
+		if num < 30 || (num > 50 && num < 70) {
+			<div>
+				@RootCanalUp()
+			</div>
+		} else {
+			<div>
+				<p>
+					{ fmt.Sprint(num) }
+				</p>
+			</div>
+		}
+		<div class="relative w-12 h-12">
+			<div class="absolute">
+				@FrontTop()
+			</div>
+			<div class="absolute">
+				@FrontLeft()
+			</div>
+			<div class="absolute left-9">
+				@FrontRight()
+			</div>
+			<div class="absolute top-6">
+				@FrontBottom()
+			</div>
+		</div>
+		if num < 30 || (num > 50 && num < 70) {
+			<div>
+				<p>
+					{ fmt.Sprint(num) }
+				</p>
+			</div>
+		} else {
+			@RootCanalDown()
+		}
+	</div>
+}
+
+func getClassForBack(num int) int {
+	switch true {
+	case num == 17 || num == 16 || num == 26 || num == 27:
+		return 3
+	case num%10 == 6 || num%10 == 7 || num%10 == 8:
+		return 2
+	default:
+		return 1
+	}
+}
+
+templ BackTooth(num int) {
+	<div class="flex flex-col items-center text-center">
+		if num < 30 || (num > 50 && num < 70) {
+			<div class="flex flex-row">
+				for range getClassForBack(num) {
+					@RootCanalUp()
+				}
+			</div>
+		} else {
+			<div>
+				<p>
+					{ fmt.Sprint(num) }
+				</p>
+			</div>
+		}
+		<div class="relative w-12 h-12">
+			<div class="absolute">
+				@BackLeft()
+			</div>
+			<div class="absolute">
+				@BackTop()
+			</div>
+			<div class="absolute left-9">
+				@BackRight()
+			</div>
+			<div class="absolute top-3 left-3">
+				@BackCenter()
+			</div>
+			<div class="absolute top-9">
+				@BackBottom()
+			</div>
+		</div>
+		if num < 30 || (num > 50 && num < 70) {
+			<div>
+				<p>
+					{ fmt.Sprint(num) }
+				</p>
+			</div>
+		} else {
+			<div class="flex flex-row">
+				for range getClassForBack(num) {
+					@RootCanalDown()
+				}
+			</div>
+		}
+	</div>
+}
+
+templ PatientPage(patient models.Patient) {
+	<!DOCTYPE HTML>
+	<html>
+		@head("Pacjent")
+		<body hx-boost="true" class="font-mono">
+			@BackHome()
+			<div class="flex flex-col w-80 gap-2 ml-[10%]">
+				<div class="container p-10 flex flex-col">
+					<p>
+						{ patient.Name } { patient.Surname }
+					</p>
+				</div>
+				<div class="flex flex-row gap-2">
+					<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
+						@BackTooth(18)
+						@BackTooth(17)
+						@BackTooth(16)
+						@BackTooth(15)
+						@BackTooth(14)
+						@FrontTooth(13)
+						@FrontTooth(12)
+						@FrontTooth(11)
+					</div>
+					<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
+						@FrontTooth(21)
+						@FrontTooth(22)
+						@FrontTooth(23)
+						@BackTooth(24)
+						@BackTooth(25)
+						@BackTooth(26)
+						@BackTooth(27)
+						@BackTooth(28)
+					</div>
+				</div>
+				<div class="flex flex-row gap-2">
+					<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
+						@BackTooth(48)
+						@BackTooth(47)
+						@BackTooth(46)
+						@BackTooth(45)
+						@BackTooth(44)
+						@FrontTooth(43)
+						@FrontTooth(42)
+						@FrontTooth(41)
+					</div>
+					<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
+						@FrontTooth(31)
+						@FrontTooth(32)
+						@FrontTooth(33)
+						@BackTooth(34)
+						@BackTooth(35)
+						@BackTooth(36)
+						@BackTooth(37)
+						@BackTooth(38)
+					</div>
+				</div>
+				<div class="flex flex-row gap-2 mt-5">
+					<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
+						@BackTooth(55)
+						@BackTooth(54)
+						@FrontTooth(53)
+						@FrontTooth(52)
+						@FrontTooth(51)
+					</div>
+					<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
+						@FrontTooth(61)
+						@FrontTooth(62)
+						@FrontTooth(63)
+						@BackTooth(64)
+						@BackTooth(65)
+					</div>
+				</div>
+				<div class="flex flex-row gap-2">
+					<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
+						@BackTooth(85)
+						@BackTooth(84)
+						@FrontTooth(83)
+						@FrontTooth(82)
+						@FrontTooth(81)
+					</div>
+					<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
+						@FrontTooth(71)
+						@FrontTooth(72)
+						@FrontTooth(73)
+						@BackTooth(74)
+						@BackTooth(75)
+					</div>
+				</div>
+			</div>
+		</body>
+	</html>
+}

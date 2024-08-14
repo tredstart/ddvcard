@@ -46,9 +46,9 @@ func NewPatient(c echo.Context) error {
 	patient.Registered = time.Now().Format("02.01.2006")
 	patient.Phone = r.FormValue("phone")
 	patient.Id = uuid.NewString()
-	patient.Medicines = r.FormValue("medicines")
+	patient.Medicine = r.FormValue("medicines")
 	patient.Illness = GetIllness(r.Form["illness"])
-	if err := models.PatientCreate(patient); err != nil {
+	if err := models.CreatePatient(patient); err != nil {
 		c.Response().Header().Add("Hx-Retarget", "#errors")
 		c.Response().Header().Add("Hx-Reswap", "innerHTML")
 		return c.String(http.StatusBadRequest, err.Error())
