@@ -18,6 +18,8 @@ func (s *Server) RegisterRoutes() http.Handler {
 	e.POST("/new-patient", routes.NewPatient)
 	e.POST("/search", routes.Search)
     e.GET("/patient/:id", routes.PatientPage)
+    e.POST("/patient/:patient_id/tooth/:tooth_id", routes.UpdateOrCreateTooth)
+    e.POST("/patient/:patient_id/tooth/", routes.UpdateOrCreateTooth)
 
 	return e
 }

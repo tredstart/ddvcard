@@ -3,13 +3,26 @@ package views
 import (
 	"ddcard/internal/models"
 	"fmt"
+	"log"
 )
 
-templ BackTop() {
-	<svg viewBox="0 0 48 12" width="48" height="12" _="on mouseenter toggle [@stroke-width=3] on me until mouseleave">
+func ToothScript() string {
+	return fmt.Sprintf("on mouseenter toggle [@stroke-width=3] on me until mouseleave")
+}
+
+templ BackTop(pid string, tooth models.Tooth, num int) {
+	<svg
+		viewBox="0 0 48 12"
+		width="48"
+		height="12"
+		fill={ getFillTooth(tooth, models.Top) }
+		stroke="black"
+		hx-trigger="sendEm"
+		hx-post={ getToothPost(pid, tooth.Id) }
+		hx-swap="outerHTML"
+		_={ toothOnClick(num, models.Top, "back") }
+	>
 		<path
-			fill="none"
-			stroke="black"
 			d="
             M 0 0
             h 48 
@@ -20,11 +33,19 @@ templ BackTop() {
 	</svg>
 }
 
-templ BackRight() {
-	<svg viewBox="0 0 12 48" width="12" height="48" _="on mouseenter toggle [@stroke-width=3] on me until mouseleave">
+templ BackRight(pid string, tooth models.Tooth, num int) {
+	<svg
+		viewBox="0 0 12 48"
+		width="12"
+		height="48"
+		fill={ getFillTooth(tooth, models.Right) }
+		stroke="black"
+		hx-trigger="sendEm"
+		hx-post={ getToothPost(pid, tooth.Id) }
+		hx-swap="outerHTML"
+		_={ toothOnClick(num, models.Right, "back") }
+	>
 		<path
-			fill="none"
-			stroke="black"
 			d="
             M 12 0
             v 48 
@@ -35,11 +56,19 @@ templ BackRight() {
 	</svg>
 }
 
-templ BackBottom() {
-	<svg viewBox="0 0 48 12" width="48" height="12" _="on mouseenter toggle [@stroke-width=3] on me until mouseleave">
+templ BackBottom(pid string, tooth models.Tooth, num int) {
+	<svg
+		viewBox="0 0 48 12"
+		width="48"
+		height="12"
+		fill={ getFillTooth(tooth, models.Bottom) }
+		stroke="black"
+		hx-trigger="sendEm"
+		hx-post={ getToothPost(pid, tooth.Id) }
+		hx-swap="outerHTML"
+		_={ toothOnClick(num, models.Bottom, "back") }
+	>
 		<path
-			fill="none"
-			stroke="black"
 			d="
             M 0 12
             h 48
@@ -50,11 +79,19 @@ templ BackBottom() {
 	</svg>
 }
 
-templ BackLeft() {
-	<svg viewBox="0 0 12 48" width="12" height="48" _="on mouseenter toggle [@stroke-width=3] on me until mouseleave">
+templ BackLeft(pid string, tooth models.Tooth, num int) {
+	<svg
+		viewBox="0 0 12 48"
+		width="12"
+		height="48"
+		fill={ getFillTooth(tooth, models.Left) }
+		stroke="black"
+		hx-trigger="sendEm"
+		hx-post={ getToothPost(pid, tooth.Id) }
+		hx-swap="outerHTML"
+		_={ toothOnClick(num, models.Left, "back") }
+	>
 		<path
-			fill="none"
-			stroke="black"
 			d="
             M 0 0
             v 48 
@@ -65,11 +102,52 @@ templ BackLeft() {
 	</svg>
 }
 
-templ BackCenter() {
-	<svg viewBox="0 0 24 24" width="24" height="24" _="on mouseenter toggle [@stroke-width=3] on me until mouseleave">
+func getToothPost(pid, tid string) string {
+	return fmt.Sprintf("/patient/%s/tooth/%s", pid, tid)
+}
+
+func getFillTooth(tooth models.Tooth, side int) string {
+	if tooth.Id == "" {
+		return "none"
+	} else {
+		log.Println(tooth, side)
+		switch side {
+		case models.Top:
+			return ToothStatus[tooth.T]
+		case models.Right:
+			return ToothStatus[tooth.R]
+		case models.Bottom:
+			return ToothStatus[tooth.B]
+		case models.Left:
+			return ToothStatus[tooth.L]
+		case models.Center:
+			return ToothStatus[tooth.Center]
+		default:
+			return "none"
+		}
+	}
+}
+
+func toothOnClick(num, side int, tooth_type string) string {
+	return fmt.Sprintf(
+		`on click set params to {"num": %d, "side": %d, "proc": $fillValue, "type": "%s"} then 
+            put params as JSON into @hx-vals then send sendEm to me
+            on mouseenter toggle [@stroke-width=3] on me until mouseleave`, num, side, tooth_type)
+}
+
+templ BackCenter(pid string, tooth models.Tooth, num int) {
+	<svg
+		viewBox="0 0 24 24"
+		width="24"
+		height="24"
+		fill={ getFillTooth(tooth, models.Center) }
+		stroke="black"
+		hx-trigger="sendEm"
+		hx-post={ getToothPost(pid, tooth.Id) }
+		hx-swap="outerHTML"
+		_={ toothOnClick(num, models.Center, "back") }
+	>
 		<path
-			fill="none"
-			stroke="black"
 			d="
             M 0 0
             h 24 
@@ -80,14 +158,17 @@ templ BackCenter() {
 	</svg>
 }
 
-templ FrontTop() {
+templ FrontTop(pid string, tooth models.Tooth, num int) {
 	<svg
 		viewBox="0 0 48 24"
-		fill="none"
+		width="48px"
+		height="24px"
+		fill={ getFillTooth(tooth, models.Top) }
 		stroke="black"
-		width="48"
-		height="24"
-		_="on mouseenter toggle [@stroke-width=3] on me until mouseleave"
+		hx-trigger="sendEm"
+		hx-post={ getToothPost(pid, tooth.Id) }
+		hx-swap="outerHTML"
+		_={ toothOnClick(num, models.Top, "front") }
 	>
 		<path
 			d="
@@ -100,14 +181,17 @@ templ FrontTop() {
 	</svg>
 }
 
-templ FrontLeft() {
+templ FrontLeft(pid string, tooth models.Tooth, num int) {
 	<svg
 		viewBox="0 0 12 48"
-		fill="none"
-		stroke="black"
 		width="12"
 		height="48"
-		_="on mouseenter toggle [@stroke-width=3] on me until mouseleave"
+		fill={ getFillTooth(tooth, models.Left) }
+		stroke="black"
+		hx-trigger="sendEm"
+		hx-post={ getToothPost(pid, tooth.Id) }
+		hx-swap="outerHTML"
+		_={ toothOnClick(num, models.Left, "front") }
 	>
 		<path
 			d="
@@ -119,14 +203,17 @@ templ FrontLeft() {
 	</svg>
 }
 
-templ FrontBottom() {
+templ FrontBottom(pid string, tooth models.Tooth, num int) {
 	<svg
 		viewBox="0 0 48 24"
-		fill="none"
-		stroke="black"
 		width="48"
 		height="24"
-		_="on mouseenter toggle [@stroke-width=3] on me until mouseleave"
+		fill={ getFillTooth(tooth, models.Bottom) }
+		stroke="black"
+		hx-trigger="sendEm"
+		hx-post={ getToothPost(pid, tooth.Id) }
+		hx-swap="outerHTML"
+		_={ toothOnClick(num, models.Bottom, "front") }
 	>
 		<path
 			d="
@@ -139,14 +226,17 @@ templ FrontBottom() {
 	</svg>
 }
 
-templ FrontRight() {
+templ FrontRight(pid string, tooth models.Tooth, num int) {
 	<svg
 		viewBox="0 0 12 48"
-		fill="none"
-		stroke="black"
 		width="12"
 		height="48"
-		_="on mouseenter toggle [@stroke-width=3] on me until mouseleave"
+		fill={ getFillTooth(tooth, models.Right) }
+		stroke="black"
+		hx-trigger="sendEm"
+		hx-post={ getToothPost(pid, tooth.Id) }
+		hx-swap="outerHTML"
+		_={ toothOnClick(num, models.Right, "front") }
 	>
 		<path
 			d="
@@ -165,7 +255,7 @@ templ RootCanalUp() {
 		stroke="black"
 		width="16"
 		height="72"
-		_="on mouseenter toggle [@stroke-width=3] on me until mouseleave"
+		_={ ToothScript() }
 	>
 		<path
 			d="
@@ -184,7 +274,7 @@ templ RootCanalDown() {
 		stroke="black"
 		width="16"
 		height="72"
-		_="on mouseenter toggle [@stroke-width=3] on me until mouseleave"
+		_={ ToothScript() }
 	>
 		<path
 			d="
@@ -196,7 +286,7 @@ templ RootCanalDown() {
 	</svg>
 }
 
-templ FrontTooth(num int) {
+templ FrontTooth(pid string, tooth models.Tooth, num int) {
 	<div class="flex flex-col items-center text-center">
 		if num < 30 || (num > 50 && num < 70) {
 			<div>
@@ -211,16 +301,16 @@ templ FrontTooth(num int) {
 		}
 		<div class="relative w-12 h-12">
 			<div class="absolute">
-				@FrontTop()
+				@FrontTop(pid, tooth, num)
 			</div>
 			<div class="absolute">
-				@FrontLeft()
+				@FrontLeft(pid, tooth, num)
 			</div>
 			<div class="absolute left-9">
-				@FrontRight()
+				@FrontRight(pid, tooth, num)
 			</div>
 			<div class="absolute top-6">
-				@FrontBottom()
+				@FrontBottom(pid, tooth, num)
 			</div>
 		</div>
 		if num < 30 || (num > 50 && num < 70) {
@@ -246,7 +336,7 @@ func getClassForBack(num int) int {
 	}
 }
 
-templ BackTooth(num int) {
+templ BackTooth(num int, tooth models.Tooth, pid string) {
 	<div class="flex flex-col items-center text-center">
 		if num < 30 || (num > 50 && num < 70) {
 			<div class="flex flex-row">
@@ -263,19 +353,19 @@ templ BackTooth(num int) {
 		}
 		<div class="relative w-12 h-12">
 			<div class="absolute">
-				@BackLeft()
+				@BackLeft(pid, tooth, num)
 			</div>
 			<div class="absolute">
-				@BackTop()
+				@BackTop(pid, tooth, num)
 			</div>
 			<div class="absolute left-9">
-				@BackRight()
+				@BackRight(pid, tooth, num)
 			</div>
 			<div class="absolute top-3 left-3">
-				@BackCenter()
+				@BackCenter(pid, tooth, num)
 			</div>
 			<div class="absolute top-9">
-				@BackBottom()
+				@BackBottom(pid, tooth, num)
 			</div>
 		</div>
 		if num < 30 || (num > 50 && num < 70) {
@@ -385,13 +475,79 @@ templ KnownIllness(illness int) {
 	</p>
 }
 
-templ PatientPage(patient models.Patient) {
+var ToothStatus = map[int]string{
+	0: "none",
+	1: "#00ffff",
+	2: "blue",
+	3: "rose",
+	4: "green",
+}
+
+var ToothStatusTranslated = map[int]string{
+	0: "Cofnij",
+	1: "Ząb niewyrżnięty",
+	2: "Wypełnienie",
+	3: "Korona",
+	4: "Kamień",
+}
+
+var CanalStatus = map[int]string{
+	0: "none",
+	1: "#000fff",
+	2: "#fff000",
+	3: "#557700",
+	4: "#990099",
+}
+
+var CanalStatusTranslated = map[int]string{
+	0: "Cofnij",
+	1: "Korzeń niewyrżnięty",
+	2: "Korzeń Wypełnienie",
+	3: "Korzeń",
+	4: "What?",
+}
+
+func SetFillValue(key int, value string) string {
+	return fmt.Sprintf("on click add .font-bold to me then set $%s to '%d'", value, key)
+}
+
+templ Legend() {
+	<div class="border-2 border-black border-solid box-border w-[18.3rem] p-2">
+		<h2>Legenda: </h2>
+		<ul>
+			<li>
+				Ząb:
+				<ul>
+					for key := range ToothStatus {
+						<li
+							class="hover:font-bold hover:cursor-pointer"
+							_={ SetFillValue(key, "fillValue") }
+						>{ ToothStatusTranslated[key] }</li>
+					}
+				</ul>
+			</li>
+			<li>
+				Kanał:
+				<ul>
+					for key := range CanalStatus {
+						<li
+							class="hover:font-bold hover:cursor-pointer"
+							_={ SetFillValue(key, "canalValue") }
+						>{ CanalStatusTranslated[key] }</li>
+					}
+				</ul>
+			</li>
+		</ul>
+	</div>
+}
+
+templ PatientPage(patient models.Patient, teeth map[int]models.Tooth) {
 	<!DOCTYPE HTML>
 	<html>
 		@head("Pacjent")
-		<body hx-boost="true" class="font-mono">
+		<body hx-boost="true" class="font-mono" _="on load set $fillValue to '0' on load set $canalValue to '0'">
 			@BackHome()
-			<div class="flex flex-col w-80 gap-2 ml-[10%]">
+			<div class="flex flex-col w-[80%] gap-2 ml-[10%]">
 				<div class="container p-10 flex flex-col">
 					<p>
 						{ patient.Name } { patient.Surname }
@@ -410,81 +566,80 @@ templ PatientPage(patient models.Patient) {
 					</p>
 					@KnownIllness(patient.Illness)
 				</div>
-				<div class="flex flex-row gap-2">
-					<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
-						@BackTooth(18)
-						@BackTooth(17)
-						@BackTooth(16)
-						@BackTooth(15)
-						@BackTooth(14)
-						@FrontTooth(13)
-						@FrontTooth(12)
-						@FrontTooth(11)
+				<div class="flex flex-col gap-5">
+					<div class="flex flex-row gap-2">
+						<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
+							for i := 18; i >= 14; i = i - 1 {
+								@BackTooth(i, teeth[i], patient.Id)
+							}
+							for i := 13; i >= 11; i = i - 1 {
+								@FrontTooth(patient.Id, teeth[i], i)
+							}
+						</div>
+						<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
+							for i := 21; i <= 23; i++ {
+								@FrontTooth(patient.Id, teeth[i], i)
+							}
+							for i := 24; i <= 28; i++ {
+								@BackTooth(i, teeth[i], patient.Id)
+							}
+						</div>
 					</div>
-					<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
-						@FrontTooth(21)
-						@FrontTooth(22)
-						@FrontTooth(23)
-						@BackTooth(24)
-						@BackTooth(25)
-						@BackTooth(26)
-						@BackTooth(27)
-						@BackTooth(28)
-					</div>
-				</div>
-				<div class="flex flex-row gap-2">
-					<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
-						@BackTooth(48)
-						@BackTooth(47)
-						@BackTooth(46)
-						@BackTooth(45)
-						@BackTooth(44)
-						@FrontTooth(43)
-						@FrontTooth(42)
-						@FrontTooth(41)
-					</div>
-					<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
-						@FrontTooth(31)
-						@FrontTooth(32)
-						@FrontTooth(33)
-						@BackTooth(34)
-						@BackTooth(35)
-						@BackTooth(36)
-						@BackTooth(37)
-						@BackTooth(38)
+					<div class="flex flex-row gap-2">
+						<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
+							for i := 48; i >= 44; i-- {
+								@BackTooth(i, teeth[i], patient.Id)
+							}
+							for i := 43; i >= 41; i-- {
+								@FrontTooth(patient.Id, teeth[i], i)
+							}
+						</div>
+						<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
+							for i := 31; i <= 33; i++ {
+								@FrontTooth(patient.Id, teeth[i], i)
+							}
+							for i := 34; i <= 38; i++ {
+								@BackTooth(i, teeth[i], patient.Id)
+							}
+						</div>
 					</div>
 				</div>
-				<div class="flex flex-row gap-2 mt-5">
-					<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
-						@BackTooth(55)
-						@BackTooth(54)
-						@FrontTooth(53)
-						@FrontTooth(52)
-						@FrontTooth(51)
+				<div class="flex flex-row gap-5 mt-5">
+					<div class="flex flex-col gap-5">
+						<div class="flex flex-row gap-2">
+							<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
+								@BackTooth(55, teeth[55], patient.Id)
+								@BackTooth(54, teeth[54], patient.Id)
+								for i := 53; i >= 51; i-- {
+									@FrontTooth(patient.Id, teeth[i], i)
+								}
+							</div>
+							<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
+								for i := 61; i <= 63; i++ {
+									@FrontTooth(patient.Id, teeth[i], i)
+								}
+								@BackTooth(64, teeth[64], patient.Id)
+								@BackTooth(65, teeth[65], patient.Id)
+							</div>
+						</div>
+						<div class="flex flex-row gap-2">
+							<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
+								@BackTooth(85, teeth[85], patient.Id)
+								@BackTooth(84, teeth[84], patient.Id)
+								for i := 83; i >= 81; i-- {
+									@FrontTooth(patient.Id, teeth[i], i)
+								}
+							</div>
+							<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
+								for i := 71; i <= 73; i++ {
+									@FrontTooth(patient.Id, teeth[i], i)
+								}
+								@BackTooth(74, teeth[74], patient.Id)
+								@BackTooth(75, teeth[75], patient.Id)
+							</div>
+						</div>
 					</div>
-					<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
-						@FrontTooth(61)
-						@FrontTooth(62)
-						@FrontTooth(63)
-						@BackTooth(64)
-						@BackTooth(65)
-					</div>
-				</div>
-				<div class="flex flex-row gap-2">
-					<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
-						@BackTooth(85)
-						@BackTooth(84)
-						@FrontTooth(83)
-						@FrontTooth(82)
-						@FrontTooth(81)
-					</div>
-					<div class="flex gap-1 flex-row p-10 border-black border-2 border-solid">
-						@FrontTooth(71)
-						@FrontTooth(72)
-						@FrontTooth(73)
-						@BackTooth(74)
-						@BackTooth(75)
-					</div>
+					@Legend()
 				</div>
 			</div>
 		</body>
